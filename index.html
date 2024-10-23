@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title></title>
+        <style>
+            body{ background-color: ivory; padding:10px; }
+            #canvas{border:1px solid red;}
+        </style>
+    </head>
+    <body>
+        <h4>Bijna pinball</h4>
+        <canvas id="canvas" width=750 height=750></canvas>        
+        <script type="module" >
+            "use strict";
+            import { V2 } from "./Vector2.js";
+
+            import { Playfield } from "./Pinball.js";
+
+            const canvas = document.getElementById("canvas");
+            const playfield = new Playfield(canvas);
+
+            function touchMove(evt)
+            {
+                // Chnage Bezier control point
+                // p2.x = evt.touches[0].clientX;
+                // p2.y = evt.touches[0].clientY;
+                const c = V2(evt.touches[0].clientX, evt.touches[0].clientY);
+                playfield.elements[0].points[1].x = c.x;
+                playfield.elements[0].points[1].y = c.y;
+
+                playfield.frame();
+            }
+
+            function mouseMove(evt)
+            {
+                const dir = V2(evt.offsetX, evt.offsetY).sub(playfield.balls[0].position);
+                // Change pinball direction
+                playfield.balls[0].direction = dir;
+                // .x = dir;
+                // playfield.balls[0].direction.y = evt.offsetY;
+
+                playfield.frame();
+            }
+
+            document.addEventListener("mousemove", mouseMove);
+            document.addEventListener("touchmove", touchMove);
+            
+        </script>
+    </body>
+</html>
